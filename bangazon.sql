@@ -1,0 +1,112 @@
+DELETE FROM TrainingProgram;
+DELETE FROM Computers;
+DELETE FROM Departments;
+DELETE FROM Customer;
+DELETE FROM ProductTypes;
+DELETE FROM Product;
+DELETE FROM Employees;
+DELETE FROM Orders;
+DELETE FROM PaymentTypes;
+DELETE FROM EmployeeComputer;
+DELETE FROM OrderProducts;
+DELETE FROM EmployeePrograms;
+
+DROP TABLE IF EXISTS TrainingProgram;
+DROP TABLE IF EXISTS Computers;
+DROP TABLE IF EXISTS Departments;
+DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS ProductTypes;
+DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS Employees;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS PaymentTypes;
+DROP TABLE IF EXISTS EmployeeComputer;
+DROP TABLE IF EXISTS OrderProducts;
+DROP TABLE IF EXISTS EmployeePrograms;
+
+
+CREATE TABLE `Departments` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`DepartmentName` TEXT NOT NULL,
+	`Budget` TEXT NOT NULL
+);
+CREATE TABLE `Customer` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`FirstName` TEXT NOT NULL,
+	`LastName` TEXT NOT NULL,
+	`DateCreated` TEXT NOT NULL,
+	`LoginDate` TEXT NOT NULL,
+	`ActiveCustomer` TEXT NOT NULL
+);
+CREATE TABLE `ProductTypes` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`Category` TEXT NOT NULL
+);
+CREATE TABLE `Computers` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`DatePurchased` TEXT NOT NULL,
+	`RepairNeeded` BOOLEAN NOT NULL
+);
+CREATE TABLE `TrainingProgram` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`ProgramName` TEXT NOT NULL,
+	`StartDate` TEXT NOT NULL,
+	`EndDate` TEXT NOT NULL,
+	`MaxAttendees` TEXT NOT NULL 
+);
+CREATE TABLE `PaymentTypes` (
+	`Id`   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`PaymentType` TEXT NOT NULL,
+	`AccountNo` INTEGER NOT NULL,
+	`CustomerID` INTEGER NOT NULL,
+	 FOREIGN KEY(`CustomerID`) REFERENCES `Customer` (`CustomerID`)
+);
+CREATE TABLE `Orders` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`OrderName` TEXT NOT NULL,
+	`CustomerID` INTEGER NOT NULL,
+	`PaymentTypesID` INTEGER NOT NULL,
+	FOREIGN KEY(`CustomerID`) REFERENCES `Customer` (`CustomerID`),
+	FOREIGN KEY(`PaymentTypesID`) REFERENCES `PaymentTypes`(`PaymentTypesID`)
+);
+CREATE TABLE `Product` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`Price` TEXT NOT NULL,
+	`Title` TEXT NOT NULL,
+	`Description` TEXT NOT NULL,
+	`Quantity` INTEGER NOT NULL ,
+	`CustomerID` INTEGER NOT NULL,
+	`ProductTypeID` INTEGER NOT NULL,
+	FOREIGN KEY(`CustomerID`) REFERENCES `Customer`(`CustomerID`),
+	FOREIGN KEY(`ProductTypeID`) REFERENCES `ProductType`(`ProductTypeID`)
+);
+CREATE TABLE `Employees` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`EmployeeName` TEXT NOT NULL,
+	`SupervisorName` TEXT NOT NULL,
+	`DepartmentID` INTEGER NOT NULL,
+	FOREIGN KEY(`DepartmentID`) REFERENCES `Departments`(`DepartmentID`)
+);
+CREATE TABLE `EmployeeComputer` (
+`Id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`EmployeeID` INTEGER NOT NULL,
+	`ComputerID` INTEGER NOT NULL,
+	FOREIGN KEY(`EmployeeID`) REFERENCES `Employee`(`EmployeeID`),
+	FOREIGN KEY(`ComputerID`) REFERENCES `Computer`(`ComputerID`)
+);
+CREATE TABLE `OrderProducts` (
+`Id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`OrderID` INTEGER NOT NULL,
+	`ProductsID` INTEGER NOT NULL,
+	FOREIGN KEY(`OrderID`) REFERENCES `Order`(`OrderID`),
+	FOREIGN KEY(`ProductsID`) REFERENCES `Products`(`ProductsID`)
+);
+CREATE TABLE `EmployeePrograms` (
+`Id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`EmployeeID` INTEGER NOT NULL,
+	`TrainingProgramsID` INTEGER NOT NULL,
+	FOREIGN KEY(`EmployeeID`) REFERENCES `Employee`(`EmployeeID`),
+	FOREIGN KEY(`TrainingProgramsID`) REFERENCES `TrainingPrograms`(`TrainingProgramsID`)
+);
+
+
